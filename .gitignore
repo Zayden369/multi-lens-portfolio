@@ -1,5 +1,6 @@
 # Downloaded fonts have separate licenses and are kept locally.
 reference-fonts/
+assets/abhishek-resume.pdf
 
 # Local editor and deployment state.
 .vercel/
