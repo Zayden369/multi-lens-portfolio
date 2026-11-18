@@ -285,8 +285,11 @@ function paint(time) {
     if (root.dataset.mode === 'modern') {
       document.dispatchEvent(new CustomEvent('portfolio:frame', {detail: {opening}}));
     }
+    if (root.dataset.mode === 'boho') {
+      document.dispatchEvent(new CustomEvent('portfolio:journal-frame', {detail: {opening}}));
+    }
   }
-  if (visibleStage && root.dataset.mode !== 'modern') {
+  if (visibleStage && root.dataset.mode !== 'modern' && root.dataset.mode !== 'boho') {
     const key = root.dataset.mode;
     drawWorld(key, motion.matches ? .68 : opening, motion.matches ? 0 : time / 1000, worlds[key][3]);
     if (!motion.matches) frame = requestAnimationFrame(paint);
