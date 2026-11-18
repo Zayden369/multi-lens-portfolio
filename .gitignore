@@ -1,0 +1,7 @@
+# Downloaded fonts have separate licenses and are kept locally.
+reference-fonts/
+
+# Local editor and deployment state.
+.vercel/
+.env*
+*.zip
