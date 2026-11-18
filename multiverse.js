@@ -241,13 +241,15 @@ let activeIndex = -1;
 
 function paint(time) {
   frame = 0;
+  if (document.hidden) return;
   if (pageDirty) {
     pageDirty = false;
     const viewport = window.innerHeight;
     const maxScroll = document.documentElement.scrollHeight - viewport;
     progress.value = maxScroll > 0 ? 100 * clamp(scrollY / maxScroll) : 0;
     const hero = chapters[0].getBoundingClientRect();
-    opening = clamp(-hero.top / Math.max(200, hero.height - viewport * .55));
+    opening = clamp(-hero.top / Math.max(200, hero.height - viewport));
+    root.style.setProperty('--opening', motion.matches ? 0 : opening);
     visibleStage = hero.bottom > 0 && hero.top < viewport;
     let current = 0;
     chapters.forEach((chapter, index) => {
@@ -265,9 +267,19 @@ function paint(time) {
     }
     projectsOnPage.forEach(project => {
       const rect = project.getBoundingClientRect();
-      const journey = motion.matches ? 1 : clamp((innerHeight * .25 - rect.top) / Math.max(1, rect.height - innerHeight * .7));
-      project.dataset.scene = String(Math.min(2, Math.floor(journey * 3)));
+      const stacked = window.innerWidth <= 800;
+      const copyHeight = stacked ? project.querySelector('.project-copy').getBoundingClientRect().height + 92 : 0;
+      const journey = motion.matches ? 1 : clamp((innerHeight * .15 - rect.top - copyHeight) / Math.max(1, rect.height - copyHeight - innerHeight * .9));
       project.style.setProperty('--journey', journey);
+      const steps = [...project.querySelectorAll('.scene-step')];
+      project.dataset.scene = String(Math.min(Math.max(0, steps.length - 1), Math.round(journey * Math.max(0, steps.length - 1))));
+      steps.forEach((step, index) => {
+        const position = journey * (steps.length - 1);
+        const distance = clamp((Math.abs(position - index) - .3) / .5);
+        step.style.setProperty('--distance', motion.matches ? (index === steps.length - 1 ? 0 : 1) : distance);
+        step.inert = Math.round(position) !== index;
+        step.setAttribute('aria-hidden', String(Math.round(position) !== index));
+      });
       project.style.setProperty('--reveal', smooth(clamp((viewport * .86 - rect.top) / (viewport * .63))));
     });
   }
@@ -284,6 +296,7 @@ function refreshStory() {
 }
 window.addEventListener('scroll', refreshStory, {passive: true});
 window.addEventListener('resize', refreshStory);
+document.addEventListener('visibilitychange', refreshStory);
 motion.addEventListener('change', () => {
   pointer.x = pointer.y = 0;
   refreshStory();
@@ -384,6 +397,10 @@ const resumeSkip = document.querySelector('#resume-skip');
 
 const cinematic = document.querySelector('#resume-video');
 const viewer = document.querySelector('#resume-view');
+const resumePage = document.querySelector('#resume-page');
+resumePage.addEventListener('error', () => {
+  playbackStatus.textContent = 'The page preview is unavailable. Use Open PDF or Download PDF to access the original résumé.';
+});
 const playbackStatus = document.querySelector('#resume-status');
 const resumeLink = document.querySelector('a[href="#resume"]');
 let playbackSession = 0;
@@ -400,7 +417,7 @@ function revealResume() {
   stopCinematic();
   resumeDialog.classList.remove('playing');
   resumeSkip.hidden = true;
-  viewer.src = 'assets/abhishek-resume.pdf';
+  resumePage.src = 'assets/resume-page-1.png';
   viewer.hidden = false;
   if (document.activeElement === resumeSkip) document.querySelector('#resume-close').focus();
 }
@@ -410,7 +427,7 @@ function openResume(event) {
   const session = ++playbackSession;
   playbackStatus.textContent = '';
   viewer.hidden = true;
-  viewer.removeAttribute('src');
+  resumePage.removeAttribute('src');
   resumeDialog.showModal();
   if (motion.matches) {
     revealResume();
@@ -446,7 +463,7 @@ resumeDialog.addEventListener('close', () => {
   stopCinematic();
   resumeDialog.classList.remove('playing');
   viewer.hidden = true;
-  viewer.removeAttribute('src');
+  resumePage.removeAttribute('src');
   resumeButton.focus({preventScroll: true});
 });
 motion.addEventListener('change', () => {
@@ -456,7 +473,7 @@ motion.addEventListener('change', () => {
 
 const projectScenes = {
   sharing: ['Sign in securely', 'Check sharing rules', 'Open the protected document'],
-  compiler: ['Understand the requirement', 'Generate and validate schemas', 'Materialize the application'],
+  compiler: ['The idea', 'Understand the intent', 'Generate connected schemas', 'Validate and repair', 'The application takes shape'],
   stadium: ['Find the entrance', 'Identify crowded zones', 'Follow an accessible route'],
 };
 for (const [key, labels] of Object.entries(projectScenes)) {
@@ -468,9 +485,11 @@ for (const [key, labels] of Object.entries(projectScenes)) {
   if (key === 'compiler') {
     scene.querySelector('.step-0').insertAdjacentHTML('beforeend',
       '<div class="prompt-editor"><small>REQUIREMENT</small><p>Build a dashboard that tracks reading progress.</p><div class="editor-caret"></div></div>');
-    scene.querySelector('.step-1').insertAdjacentHTML('beforeend',
-      '<div class="schema-grid"><div>UI<br><code>ReadingDashboard</code></div><div>API<br><code>GET /books</code></div><div>DATA<br><code>Book.progress</code></div><div>VALIDATION<br><code>progress: number ✓</code></div></div>');
+    scene.querySelector('.step-1').insertAdjacentHTML('beforeend', '<div class="intent-map"><b>Reading progress</b><span>Books</span><span>Progress tracking</span><span>Dashboard</span><small>One requirement becomes connected responsibilities.</small></div>');
     scene.querySelector('.step-2').insertAdjacentHTML('beforeend',
+      '<div class="schema-grid"><div>UI<br><code>ReadingDashboard</code></div><div>API<br><code>GET /books</code></div><div>DATA<br><code>Book.progress</code></div><div>VALIDATION<br><code>progress: number ✓</code></div></div>');
+    scene.querySelector('.step-3').insertAdjacentHTML('beforeend', '<div class="validation-panel"><small>CROSS-LAYER CHECK</small><p><code>Book.progress</code> → <code>API.progress</code></p><del>progress: string</del><strong>progress: number</strong><span>Schema repaired · Valid components preserved</span></div>');
+    scene.querySelector('.step-4').insertAdjacentHTML('beforeend',
       '<div class="reading-app"><header>Reading room <small>Illustrative preview</small></header><strong>Your next chapter</strong><div class="reading-books"><div><i></i>Designing systems<progress value="72" max="100"></progress></div><div><i></i>Thinking in code<progress value="43" max="100"></progress></div><div><i></i>Creative practice<progress value="89" max="100"></progress></div></div></div>');
   } else if (key === 'sharing') {
     for (const [index, step] of [...scene.querySelectorAll('.scene-step')].entries()) {

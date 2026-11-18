@@ -7,3 +7,6 @@ assets/abhishek-resume.pdf
 .env*
 *.zip
 assets/resume-cinematic.mp4
+assets/resume-page-*.png
+.reference-review/
+review-evidence/
