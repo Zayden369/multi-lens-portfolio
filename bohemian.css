@@ -220,7 +220,7 @@ html[data-mode="boho"] { overflow-x: clip; }
 [data-mode="boho"] .journal-chapter-ornament { display: block; width: 100%; height: 100%; color: #9e865e; transform: scaleX(calc(.65 + var(--gate,0) * .35)); }
 [data-mode="boho"] .journal-chapter-ornament > svg { width: 100%; height: 100%; }
 [data-mode="boho"] .journal-chapter-ornament .journal-ink-path { stroke-dashoffset: calc(1500 - var(--gate,0) * 1500); }
-[data-mode="boho"] .journal-chapter-ornament[data-chapter="0"] { transform: rotate(72deg); }
+[data-mode="boho"] #work .journal-chapter-ornament { display: none; }
 [data-mode="boho"] .journal-chapter-ornament[data-chapter="1"] { border-bottom: 1px dashed #a1885d88; transform: translateX(calc((1 - var(--gate,0)) * 30px)); }
 [data-mode="boho"] .journal-chapter-ornament[data-chapter="2"] { transform: perspective(400px) rotateX(calc((1 - var(--gate,0)) * 65deg)); }
 [data-mode="boho"] .journal-chapter-ornament[data-chapter="3"] { transform: scaleX(calc(.35 + var(--gate,0) * .65)); transform-origin: left; }
