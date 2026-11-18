@@ -267,7 +267,7 @@ function paint(time) {
     }
     projectsOnPage.forEach(project => {
       const rect = project.getBoundingClientRect();
-      const stacked = window.innerWidth <= 800;
+      const stacked = window.innerWidth <= (root.dataset.mode === 'modern' ? 900 : 800);
       const copyHeight = stacked ? project.querySelector('.project-copy').getBoundingClientRect().height + 92 : 0;
       const journey = motion.matches ? 1 : clamp((innerHeight * .15 - rect.top - copyHeight) / Math.max(1, rect.height - copyHeight - innerHeight * .9));
       project.style.setProperty('--journey', journey);
@@ -282,8 +282,11 @@ function paint(time) {
       });
       project.style.setProperty('--reveal', smooth(clamp((viewport * .86 - rect.top) / (viewport * .63))));
     });
+    if (root.dataset.mode === 'modern') {
+      document.dispatchEvent(new CustomEvent('portfolio:frame', {detail: {opening}}));
+    }
   }
-  if (visibleStage) {
+  if (visibleStage && root.dataset.mode !== 'modern') {
     const key = root.dataset.mode;
     drawWorld(key, motion.matches ? .68 : opening, motion.matches ? 0 : time / 1000, worlds[key][3]);
     if (!motion.matches) frame = requestAnimationFrame(paint);
