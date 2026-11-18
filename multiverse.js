@@ -265,6 +265,9 @@ function paint(time) {
     }
     projectsOnPage.forEach(project => {
       const rect = project.getBoundingClientRect();
+      const journey = motion.matches ? 1 : clamp((innerHeight * .25 - rect.top) / Math.max(1, rect.height - innerHeight * .7));
+      project.dataset.scene = String(Math.min(2, Math.floor(journey * 3)));
+      project.style.setProperty('--journey', journey);
       project.style.setProperty('--reveal', smooth(clamp((viewport * .86 - rect.top) / (viewport * .63))));
     });
   }
@@ -378,87 +381,107 @@ applyLens(root.dataset.mode);
 const resumeDialog = document.querySelector('#resume-dialog');
 const resumeButton = document.querySelector('#resume-open');
 const resumeSkip = document.querySelector('#resume-skip');
-const energy = document.querySelector('#resume-energy');
+
+const cinematic = document.querySelector('#resume-video');
 const viewer = document.querySelector('#resume-view');
-let revealTimer;
+const playbackStatus = document.querySelector('#resume-status');
+const resumeLink = document.querySelector('a[href="#resume"]');
+let playbackSession = 0;
+
+function stopCinematic() {
+  cinematic.pause();
+  cinematic.hidden = true;
+  cinematic.removeAttribute('src');
+  cinematic.load();
+}
 
 function revealResume() {
-  clearTimeout(revealTimer);
-  energy.hidden = true;
-  if (document.activeElement === resumeSkip) document.querySelector('#resume-close').focus();
+  playbackSession++;
+  stopCinematic();
+  resumeDialog.classList.remove('playing');
   resumeSkip.hidden = true;
   viewer.src = 'assets/abhishek-resume.pdf';
   viewer.hidden = false;
+  if (document.activeElement === resumeSkip) document.querySelector('#resume-close').focus();
 }
 
-resumeButton.hidden = false;
-resumeButton.addEventListener('click', () => {
+function openResume(event) {
+  event?.preventDefault();
+  const session = ++playbackSession;
+  playbackStatus.textContent = '';
+  viewer.hidden = true;
+  viewer.removeAttribute('src');
   resumeDialog.showModal();
   if (motion.matches) {
     revealResume();
     return;
   }
+  resumeDialog.classList.add('playing');
   resumeSkip.hidden = false;
-  energy.hidden = false;
+  cinematic.hidden = false;
+  cinematic.src = 'assets/resume-cinematic.mp4';
+  cinematic.currentTime = 0;
   resumeSkip.focus();
-  revealTimer = setTimeout(revealResume, 2450);
-});
+  const playback = cinematic.play();
+  playback?.catch(() => {
+    if (session !== playbackSession || !resumeDialog.open) return;
+    playbackStatus.textContent = 'Video playback could not start. Your résumé is available below.';
+    revealResume();
+  });
+}
+
+resumeButton.hidden = false;
+resumeButton.addEventListener('click', openResume);
+resumeLink.addEventListener('click', openResume);
 resumeSkip.addEventListener('click', revealResume);
+cinematic.addEventListener('ended', revealResume);
+cinematic.addEventListener('error', () => {
+  if (!resumeDialog.open || cinematic.hidden) return;
+  playbackStatus.textContent = 'The video is unavailable. Your résumé is available below.';
+  revealResume();
+});
 document.querySelector('#resume-close').addEventListener('click', () => resumeDialog.close());
 resumeDialog.addEventListener('close', () => {
-  clearTimeout(revealTimer);
-  energy.hidden = true;
+  playbackSession++;
+  stopCinematic();
+  resumeDialog.classList.remove('playing');
   viewer.hidden = true;
   viewer.removeAttribute('src');
-  if (!resumeDialog.open) resumeButton.focus({preventScroll: true});
+  resumeButton.focus({preventScroll: true});
 });
 motion.addEventListener('change', () => {
-  if (motion.matches && resumeDialog.open && !energy.hidden) revealResume();
+  if (motion.matches && resumeDialog.open && !cinematic.hidden) revealResume();
 });
 
-const demonstrations = {
-  sharing: [
-    'Authenticate: The recipient signs in before requesting access.',
-    'Validate link: The server checks expiration, view limits, and revocation.',
-    'Grant access: A valid request can open the shared file.',
-  ],
-  compiler: [
-    'Prompt: Build a dashboard that tracks reading progress.',
-    'Generate schemas: Describe the book model, API, and dashboard view.',
-    'Validate and render: Check shared fields before rendering the dashboard.',
-  ],
-  stadium: [
-    'Entry: A fan starts at the north entrance.',
-    'Crowd alert: The direct concourse is modeled as congested.',
-    'Alternate route: Guide the fan through the quieter east concourse.',
-  ],
-};
 
-for (const [key, steps] of Object.entries(demonstrations)) {
+const projectScenes = {
+  sharing: ['Sign in securely', 'Check sharing rules', 'Open the protected document'],
+  compiler: ['Understand the requirement', 'Generate and validate schemas', 'Materialize the application'],
+  stadium: ['Find the entrance', 'Identify crowded zones', 'Follow an accessible route'],
+};
+for (const [key, labels] of Object.entries(projectScenes)) {
   const visual = document.querySelector('.project-visual.' + key);
-  const demo = document.createElement('div');
-  demo.className = 'project-demo';
-  demo.innerHTML = `<label>Explore the illustrative flow
-    <input type="range" min="0" max="2" value="0">
-  </label><div class="demo-stages" aria-hidden="true"></div><output></output>`;
-  const control = demo.querySelector('input');
-  const output = demo.querySelector('output');
-  const stages = demo.querySelector('.demo-stages');
-  for (const step of steps) {
-    const badge = document.createElement('span');
-    badge.textContent = step.split(':')[0];
-    stages.append(badge);
+  const scene = document.createElement('div');
+  scene.className = 'project-scene scene-' + key;
+  scene.innerHTML = '<p class="scene-label">Illustrative concept walkthrough</p>' +
+    labels.map((label, index) => '<div class="scene-step step-' + index + '"><span>' + label + '</span></div>').join('');
+  if (key === 'compiler') {
+    scene.querySelector('.step-0').insertAdjacentHTML('beforeend',
+      '<div class="prompt-editor"><small>REQUIREMENT</small><p>Build a dashboard that tracks reading progress.</p><div class="editor-caret"></div></div>');
+    scene.querySelector('.step-1').insertAdjacentHTML('beforeend',
+      '<div class="schema-grid"><div>UI<br><code>ReadingDashboard</code></div><div>API<br><code>GET /books</code></div><div>DATA<br><code>Book.progress</code></div><div>VALIDATION<br><code>progress: number ✓</code></div></div>');
+    scene.querySelector('.step-2').insertAdjacentHTML('beforeend',
+      '<div class="reading-app"><header>Reading room <small>Illustrative preview</small></header><strong>Your next chapter</strong><div class="reading-books"><div><i></i>Designing systems<progress value="72" max="100"></progress></div><div><i></i>Thinking in code<progress value="43" max="100"></progress></div><div><i></i>Creative practice<progress value="89" max="100"></progress></div></div></div>');
+  } else if (key === 'sharing') {
+    for (const [index, step] of [...scene.querySelectorAll('.scene-step')].entries()) {
+      step.insertAdjacentHTML('beforeend', '<div class="sharing-flow"><b>Sender</b><div class="protected-file">▤<small>project-notes.pdf</small></div><b>' + ['Authenticate', 'Password · Expiry · Access', 'Recipient ✓'][index] + '</b></div>');
+    }
+  } else {
+    for (const [index, step] of [...scene.querySelectorAll('.scene-step')].entries()) {
+      step.insertAdjacentHTML('beforeend', '<div class="stadium-map"><div class="pitch"></div><div class="crowd-zone"></div><div class="route route-' + index + '"></div><b>North entrance</b><span>Accessible concourse</span></div>');
+    }
   }
-  function showStep() {
-    const selected = control.valueAsNumber;
-    [...stages.children].forEach((badge, index) => badge.classList.toggle('selected', index === selected));
-    const step = steps[selected];
-    output.value = step;
-    control.setAttribute('aria-valuetext', step);
-  }
-  visual.append(demo);
-  control.addEventListener('input', showStep);
-  showStep();
+  visual.append(scene);
 }
 
 const simulation = document.createElement('div');

@@ -30,7 +30,8 @@ try {
 <dialog id="resume-dialog" aria-labelledby="resume-title">
   <div class="dialog-top"><h2 id="resume-title">Abhishek Gupta · Résumé</h2><button id="resume-close" aria-label="Close résumé">×</button></div>
   <div class="resume-actions"><button id="resume-skip">Skip animation</button><a href="assets/abhishek-resume.pdf" target="_blank" rel="noopener">Open PDF ↗</a><a href="assets/abhishek-resume.pdf" download>Download PDF ↓</a></div>
-  <div id="resume-energy" aria-hidden="true" hidden><i></i><i></i><i></i><b></b></div>
+  <p id="resume-status" role="status"></p>
+<video id="resume-video" preload="none" playsinline controls hidden aria-label="Résumé cinematic video"></video>
   <iframe title="Abhishek Gupta’s résumé PDF" id="resume-view" hidden></iframe>
 </dialog>
 <div id="lens-wipe" aria-hidden="true" hidden></div>
