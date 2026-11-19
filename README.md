@@ -17,12 +17,12 @@ Sketchbook references ten local font faces under `reference-fonts/`. These downl
 | Retro | A vinyl record rolls into a vintage television. Project graphics slide in like prints. |
 | Pixel | A sprite advances as the gate retracts in steps. Project content rises into place. |
 | Vector | Four curved forms reshape as they move outward. Project graphics straighten into position. |
-| 3D | A perspective camera moves through a star field and layered wireframes. Project cards move forward in depth. |
+| 3D | The Museum of Making: a Three.js camera enters an architectural gallery and tours a secure archive, application workshop, stadium model, probability table, and experience corridor. |
 | Sketchbook | A pencil trace draws a doorway onto ruled paper. Project notes slide and straighten. |
 | Editorial | A magazine cover folds open. Project spreads pivot on their edges. |
 | Victorian | Brass gears turn and separate inside a circular archive. Project records scale into view. |
 
-Every lens uses the same scroll progress and chapter navigator. On narrower or shorter views the prologue and project visuals return to normal document flow. Reduced motion disables scroll transforms and opens the PDF viewer immediately. The 3D prologue projects spatial coordinates into a 2D canvas and does not require WebGL.
+Every lens uses the shared scroll scheduler and chapter navigator. Completed lens controllers provide their own responsive story layouts and reduced-motion alternatives. Reduced motion opens the PDF viewer immediately. The 3D lens lazily loads the locally bundled Three.js runtime and uses one WebGL renderer, with an illustrated architectural fallback when rendering is unavailable. Its GPU resources are disposed when leaving the lens. See `MUSEUM_ART_DIRECTION.md` and `MUSEUM_REVIEW.md` for the architectural direction and actual verification record.
 
 The local résumé cinematic uses the exact supplied 9.45-second, 1280×720 JJK MP4. Place it at `assets/resume-cinematic.mp4`. The file is ignored by Git pending distribution-rights review. Clicking Résumé lazily loads the file and plays it once at its original timing, with contained aspect ratio on a dark full-screen background. Completion, skip, or playback failure opens a full-resolution rendering of the supplied résumé. Open PDF and Download PDF use the original document. Closing releases media resources. Reduced motion goes directly to the document. After placing the PDF locally, run `python tools/render_resume.py` with pypdfium2 and Pillow installed to generate the viewer page. Generated résumé images stay local with the PDF.
 
