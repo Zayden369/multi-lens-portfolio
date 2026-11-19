@@ -4,7 +4,9 @@ Buildless HTML, CSS, and JavaScript portfolio. Bohemian is the default. Nine vis
 
 Run a static server from this directory: `python -m http.server 4174 --bind 127.0.0.1`. Open http://127.0.0.1:4174.
 
-Vercel preview release: https://abhishek-gupta-portfolio-orpin.vercel.app/. This was uploaded through Vercel Drop, so later local edits need a new deployment.
+Vercel production: https://abhishek-gupta-portfolio-orpin.vercel.app/. The existing project is `abhishek-gupta-portfolio` in the owner's Vercel account. It is not connected to GitHub, so pushing or merging alone does not publish changes.
+
+Prepare an allowlisted public release with `python tools/prepare_vercel_release.py --include-resume`, then deploy the returned directory to that existing project using `vercel deploy <directory> --prod --yes --project abhishek-gupta-portfolio --scope <owner-team>`. This includes the owner-approved local résumé PDF and rendered page; their files remain excluded from Git. The public HTML explicitly disables the cinematic and opens the résumé directly. The original supplied-video experience remains available in the private checkout. The package excludes the anime MP4, restricted downloaded fonts, Git metadata, local review evidence and development dependencies.
 
 The latest résumé identifies the AWS Student Builder Group role as community membership. The timeline also includes the Maincraft Technologies internship and the résumé’s competition and hackathon achievements. The GitHub contribution counts are a historical snapshot. To enable the Résumé actions on a local checkout, place your approved PDF at `assets/abhishek-resume.pdf`. The source branch excludes the supplied PDF because it contains personal contact information.
 
@@ -20,7 +22,7 @@ Sketchbook now uses the original **Notebook Draft** display alphabet included in
 | 3D | The Museum of Making: a Three.js camera enters an architectural gallery and tours a secure archive, application workshop, stadium model, probability table, and experience corridor. |
 | Sketchbook | The Inventor's Notebook: a drafting sheet develops into a sharing blueprint, an application sketch becomes an HTML dashboard, a stadium plan is constructed, and real sample points form a numerical experiment. A pencil follows the pinned experience timeline. |
 | Editorial | The Engineer's Edition: a cover opens into a feature spread, followed by full-width security, application, stadium, and probability stories. A pinned profile and toolkit complete the issue. Post-change browser visual QA is pending; see `EDITORIAL_REVIEW.md`. |
-| Victorian | Brass gears turn and separate inside a circular archive. Project records scale into view. |
+| Victorian | The Mechanical Archive: carved doors unlock, a document vault opens, a paper-fed automaton assembles an application, a stadium model explains routes, and a probability instrument plots computed samples. Native scroll drives the mechanisms. |
 
 Every lens uses the shared scroll scheduler and chapter navigator. Completed lens controllers provide their own responsive story layouts and reduced-motion alternatives. Reduced motion opens the PDF viewer immediately. The 3D lens lazily loads the locally bundled Three.js runtime and uses one WebGL renderer, with an illustrated architectural fallback when rendering is unavailable. Its GPU resources are disposed when leaving the lens. See `MUSEUM_ART_DIRECTION.md` and `MUSEUM_REVIEW.md` for the architectural direction and actual verification record.
 
