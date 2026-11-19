@@ -1,0 +1,11 @@
+Adventure artwork provenance
+
+The explorer, landscapes, structures, project worlds, and 5x7 glyph patterns were
+created as original artwork for this portfolio. No commercial game character,
+sprite sheet, downloaded pixel font, or third-party game image is included.
+
+The Canvas artwork is defined in pixel-adventure.js. The original display
+alphabet is defined in tools/build_adventure_font.py, which generates
+assets/adventure-pixel.ttf using only the Python standard library. This asset
+is separate from the previously downloaded, locally restricted font files in
+reference-fonts/.
