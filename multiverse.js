@@ -7,7 +7,7 @@ const worlds = {
   retro: ['Retro', 'The Time Machine', '#f2e5c9', '#d83920'],
   pixel: ['Pixel', 'The Playable Adventure', '#101d2f', '#7cebb9'],
   vector: ['Vector', 'The Geometry Playground', '#f8f6ef', '#2351db'],
-  spatial: ['3D', 'The Multiverse', '#101021', '#bca0ff'],
+  spatial: ['3D', 'The Multiverse', '#f1eee8', '#b58b59'],
   sketch: ['Sketchbook', 'The Inventor’s Notebook', '#f8f4e9', '#3a55a6'],
   editorial: ['Editorial', 'The Interactive Magazine', '#f4f0e7', '#7c2634'],
   victorian: ['Victorian', 'The Mechanical Archive', '#f0e3c9', '#752d3a'],
@@ -297,8 +297,11 @@ function paint(time) {
     if (root.dataset.mode === 'vector') {
       document.dispatchEvent(new CustomEvent('portfolio:vector-frame', {detail: {opening}}));
     }
+    if (root.dataset.mode === 'spatial') {
+      document.dispatchEvent(new CustomEvent('portfolio:spatial-frame', {detail: {opening}}));
+    }
   }
-  if (visibleStage && !['modern', 'boho', 'pixel', 'retro', 'vector'].includes(root.dataset.mode)) {
+  if (visibleStage && !['modern', 'boho', 'pixel', 'retro', 'vector', 'spatial'].includes(root.dataset.mode)) {
     const key = root.dataset.mode;
     drawWorld(key, motion.matches ? .68 : opening, motion.matches ? 0 : time / 1000, worlds[key][3]);
     if (!motion.matches) frame = requestAnimationFrame(paint);
