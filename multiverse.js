@@ -456,7 +456,7 @@ function openResume(event) {
   viewer.hidden = true;
   resumePage.removeAttribute('src');
   resumeDialog.showModal();
-  if (motion.matches) {
+  if (motion.matches || root.dataset.resumeCinematic === 'disabled') {
     revealResume();
     return;
   }
