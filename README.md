@@ -8,7 +8,7 @@ Vercel preview release: https://abhishek-gupta-portfolio-orpin.vercel.app/. This
 
 The latest résumé identifies the AWS Student Builder Group role as community membership. The timeline also includes the Maincraft Technologies internship and the résumé’s competition and hackathon achievements. The GitHub contribution counts are a historical snapshot. To enable the Résumé actions on a local checkout, place your approved PDF at `assets/abhishek-resume.pdf`. The source branch excludes the supplied PDF because it contains personal contact information.
 
-Sketchbook references ten local font faces under `reference-fonts/`. These downloaded font files are not committed because their licenses restrict redistribution. To see Sketchbook as designed in a local checkout, place the original downloaded fonts in the paths listed by the `@font-face` rules at the top of `style.css`. Other modes work without them; the browser falls back to its default fonts in Sketchbook until those files are present. The [deployed preview](https://abhishek-gupta-portfolio-orpin.vercel.app/) includes the fonts for visual review.
+Sketchbook now uses the original **Notebook Draft** display alphabet included in `assets/notebook-draft.ttf`, with system sans-serif body copy and monospaced technical labels. Rebuild it with `python tools/build_drafting_font.py` (no dependencies). The legacy downloaded font definitions remain in `style.css`, but the redesigned Sketchbook does not depend on those files. Their personal-use/redistribution restrictions still apply, and `reference-fonts/` remains ignored. The older deployed preview does not contain this local redesign.
 
 | Lens | Prologue and project motion |
 | --- | --- |
@@ -18,11 +18,13 @@ Sketchbook references ten local font faces under `reference-fonts/`. These downl
 | Pixel | A sprite advances as the gate retracts in steps. Project content rises into place. |
 | Vector | Four curved forms reshape as they move outward. Project graphics straighten into position. |
 | 3D | The Museum of Making: a Three.js camera enters an architectural gallery and tours a secure archive, application workshop, stadium model, probability table, and experience corridor. |
-| Sketchbook | A pencil trace draws a doorway onto ruled paper. Project notes slide and straighten. |
+| Sketchbook | The Inventor's Notebook: a drafting sheet develops into a sharing blueprint, an application sketch becomes an HTML dashboard, a stadium plan is constructed, and real sample points form a numerical experiment. A pencil follows the pinned experience timeline. |
 | Editorial | A magazine cover folds open. Project spreads pivot on their edges. |
 | Victorian | Brass gears turn and separate inside a circular archive. Project records scale into view. |
 
 Every lens uses the shared scroll scheduler and chapter navigator. Completed lens controllers provide their own responsive story layouts and reduced-motion alternatives. Reduced motion opens the PDF viewer immediately. The 3D lens lazily loads the locally bundled Three.js runtime and uses one WebGL renderer, with an illustrated architectural fallback when rendering is unavailable. Its GPU resources are disposed when leaving the lens. See `MUSEUM_ART_DIRECTION.md` and `MUSEUM_REVIEW.md` for the architectural direction and actual verification record.
+
+Sketchbook uses original SVG illustrations, progress-controlled stroke drawing, separate narrow-screen compositions, and accessible HTML project facts and drawing transcripts. Its controller listens to the shared scheduler only while selected. Opening, project, and experience scenes pin with native scrolling; reduced motion presents their completed states in normal flow. Mobile supporting chapters also use normal document flow. See `SKETCHBOOK_DIRECTION.md` and `SKETCHBOOK_REVIEW.md` for the illustration system, storyboards, evidence, and verification limits. No additional animation or rendering library is required.
 
 The local résumé cinematic uses the exact supplied 9.45-second, 1280×720 JJK MP4. Place it at `assets/resume-cinematic.mp4`. The file is ignored by Git pending distribution-rights review. Clicking Résumé lazily loads the file and plays it once at its original timing, with contained aspect ratio on a dark full-screen background. Completion, skip, or playback failure opens a full-resolution rendering of the supplied résumé. Open PDF and Download PDF use the original document. Closing releases media resources. Reduced motion goes directly to the document. After placing the PDF locally, run `python tools/render_resume.py` with pypdfium2 and Pillow installed to generate the viewer page. Generated résumé images stay local with the PDF.
 
