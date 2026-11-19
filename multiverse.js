@@ -10,7 +10,7 @@ const worlds = {
   spatial: ['3D', 'The Multiverse', '#f1eee8', '#b58b59'],
   sketch: ['Sketchbook', 'The Inventor’s Notebook', '#f5f1e7', '#3d6194'],
   editorial: ['Editorial', 'The Living Magazine', '#f5f2eb', '#752c3c'],
-  victorian: ['Victorian', 'The Mechanical Archive', '#f0e3c9', '#752d3a'],
+  victorian: ['Victorian', 'The Mechanical Archive', '#ede2cb', '#6d3038'],
 };
 
 const chapterNames = ['Prologue', 'Selected work', 'Open source', 'About', 'Skills', 'Contact'];
@@ -306,8 +306,11 @@ function paint(time) {
     if (root.dataset.mode === 'editorial') {
       document.dispatchEvent(new CustomEvent('portfolio:editorial-frame', {detail: {opening}}));
     }
+    if (root.dataset.mode === 'victorian') {
+      document.dispatchEvent(new CustomEvent('portfolio:archive-frame', {detail: {opening}}));
+    }
   }
-  if (visibleStage && !['modern', 'boho', 'pixel', 'retro', 'vector', 'spatial', 'sketch', 'editorial'].includes(root.dataset.mode)) {
+  if (visibleStage && !['modern', 'boho', 'pixel', 'retro', 'vector', 'spatial', 'sketch', 'editorial', 'victorian'].includes(root.dataset.mode)) {
     const key = root.dataset.mode;
     drawWorld(key, motion.matches ? .68 : opening, motion.matches ? 0 : time / 1000, worlds[key][3]);
     if (!motion.matches) frame = requestAnimationFrame(paint);
