@@ -35,7 +35,7 @@ def prepare(include_resume=False):
         raise ValueError("Unexpected HTML root; refusing an unconfigured public release")
     html_path.write_text(html.replace(marker, '<html lang="en" data-mode="boho" data-resume-cinematic="disabled">'), encoding="utf-8")
     if include_resume:
-        for name in ("assets/abhishek-resume.pdf", "assets/resume-page-1.png"):
+        for name in ("assets/abhishek-resume.pdf",):
             src = ROOT / name
             if not src.is_file():
                 raise FileNotFoundError("Approved resume artifact is missing: " + name)
@@ -56,5 +56,5 @@ def prepare(include_resume=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--include-resume", action="store_true", help="Include the owner-approved local PDF and its readable rendered page")
+    parser.add_argument("--include-resume", action="store_true", help="Include the owner-approved original PDF; private footage and its final-frame image remain excluded")
     prepare(parser.parse_args().include_resume)

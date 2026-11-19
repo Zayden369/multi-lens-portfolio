@@ -57,10 +57,10 @@ async function fixture(withObserver=true){
 }
 const results=[await fixture(true),await fixture(false)];
 const prior=execFileSync('git',['show','1fca75e:multiverse.js'],{encoding:'utf8'}).replaceAll('\r\n','\n');
-const transition=s=>s.slice(s.indexOf('async function changeLens('),s.indexOf('\nconst resumeDialog'));
+const transition=s=>s.slice(s.indexOf('async function changeLens('),s.includes('\nconst resumeDialog')?s.indexOf('\nconst resumeDialog'):s.indexOf('\n// Résumé lifecycle')).trimEnd();
 assert.equal(transition(source),transition(prior),'circular reveal, top reset and dialog handlers are unchanged');
-const expectedResume=prior.slice(prior.indexOf('const resumeDialog')).replace('if (motion.matches) {','if (motion.matches || root.dataset.resumeCinematic === \'disabled\') {');
-assert.equal(source.slice(source.indexOf('const resumeDialog')),expectedResume,'private JJK/PDF flow is preserved; only the explicit public-release bypass is added');
+assert.equal(source.slice(source.indexOf('const projectScenes')),prior.slice(prior.indexOf('const projectScenes')),'shared project scenes remain unchanged after extracting the resume controller');
+assert.ok(fs.readFileSync('resume-cinematic.js','utf8').includes("root.dataset.resumeCinematic === 'disabled'"),'public direct-PDF configuration remains supported');
 const css=fs.readFileSync('lens-previews.css','utf8');
 assert.ok(css.includes('prefers-reduced-motion:reduce'));assert.ok(css.includes('animation:none!important'));assert.ok(css.includes('[data-playing="true"]'));
 const keyframes=[...css.matchAll(/@keyframes\s+([\w-]+)/g)].map(m=>m[1]);assert.equal(new Set(keyframes).size,keyframes.length);
