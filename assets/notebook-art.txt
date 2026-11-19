@@ -1,0 +1,11 @@
+Notebook Draft display alphabet and Sketchbook technical illustrations
+Original artwork authored for this portfolio, 2026.
+
+The alphabet centerlines and generator live in tools/build_drafting_font.py.
+It uses the existing project's dependency-free TrueType packing helpers.
+It contains no outlines from the downloaded reference fonts.
+The generated font and original SVG/HTML illustrations may be redistributed
+with this project's source. No third-party images or font files are bundled.
+
+Use the display alphabet for short titles; lowercase deliberately maps to
+capitals. Body copy, controls, and technical labels use system fonts.
