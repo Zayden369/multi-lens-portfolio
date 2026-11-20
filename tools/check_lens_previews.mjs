@@ -10,6 +10,7 @@ const {parseHTML}=require('linkedom');
 const source=fs.readFileSync('multiverse.js','utf8').replaceAll('\r\n','\n');
 const worldLiteral=source.slice(source.indexOf('const worlds = ')+15,source.indexOf('\n};',source.indexOf('const worlds = '))+2);
 const worlds=vm.runInNewContext('('+worldLiteral+')');
+const lensCount=Object.keys(worlds).length;
 const pause=()=>new Promise(r=>setImmediate(r));
 async function fixture(withObserver=true){
  const {window,document}=parseHTML(fs.readFileSync('index.html','utf8'));
@@ -31,18 +32,18 @@ async function fixture(withObserver=true){
  const ctx=vm.createContext({window,document,console,MutationObserver:window.MutationObserver,matchMedia:()=>media,innerWidth:1000,innerHeight:800,...(withObserver?{IntersectionObserver:Observer}:{})});
  for(const file of ['archive-mechanics.js','lens-preview-art.js','lens-previews.js'])vm.runInContext(fs.readFileSync(file,'utf8'),ctx,{filename:file});
  const previews=[...document.querySelectorAll('.lens-preview')],playing=()=>previews.filter(el=>el.dataset.playing==='true').length;
- assert.equal(previews.length,9);assert.equal(playing(),0);assert.deepEqual([...grid.children],originalButtons,'existing buttons and listener identities survive');
- assert.equal(new Set(previews.map(n=>n.innerHTML)).size,9);
+ assert.equal(previews.length,lensCount);assert.equal(playing(),0);assert.deepEqual([...grid.children],originalButtons,'existing buttons and listener identities survive');
+ assert.equal(new Set(previews.map(n=>n.innerHTML)).size,lensCount);
  assert.ok(previews.every(n=>n.getAttribute('aria-hidden')==='true'&&!n.textContent.includes('Aa')));
  assert.equal(grid.querySelectorAll('button button').length,0);
  assert.deepEqual([...grid.querySelectorAll(':scope > button > strong')].map(n=>n.textContent),Object.values(worlds).map(w=>w[0]));
  // A genuinely off-screen card starts paused even before the first observer delivery.
- previews[8].getBoundingClientRect=()=>rect(700,110,60,140);
- dialog.open=true;await pause();assert.equal(playing(),8);
- if(withObserver){assert.equal(io.options.root,dialog);assert.equal(io.nodes.length,9);io.entries([{target:previews[8],isIntersecting:true,intersectionRatio:.5}]);assert.equal(playing(),9);io.entries([{target:previews[0],isIntersecting:false,intersectionRatio:0}]);assert.equal(playing(),8);}
- else{previews[8].getBoundingClientRect=()=>rect(500,110,60,140);dialog.dispatchEvent(new window.Event('scroll'));assert.equal(playing(),9);}
+ previews[lensCount-1].getBoundingClientRect=()=>rect(700,110,60,140);
+ dialog.open=true;await pause();assert.equal(playing(),lensCount-1);
+ if(withObserver){assert.equal(io.options.root,dialog);assert.equal(io.nodes.length,lensCount);io.entries([{target:previews[lensCount-1],isIntersecting:true,intersectionRatio:.5}]);assert.equal(playing(),lensCount);io.entries([{target:previews[0],isIntersecting:false,intersectionRatio:0}]);assert.equal(playing(),lensCount-1);}
+ else{previews[lensCount-1].getBoundingClientRect=()=>rect(500,110,60,140);dialog.dispatchEvent(new window.Event('scroll'));assert.equal(playing(),lensCount);}
  hidden=true;document.dispatchEvent(new window.Event('visibilitychange'));assert.equal(playing(),0);
- hidden=false;document.dispatchEvent(new window.Event('visibilitychange'));assert.equal(playing(),withObserver?8:9);
+ hidden=false;document.dispatchEvent(new window.Event('visibilitychange'));assert.equal(playing(),withObserver?lensCount-1:lensCount);
  media.matches=true;for(const f of mediaListeners)f();assert.equal(playing(),0);
  media.matches=false;for(const f of mediaListeners)f();assert.ok(playing()>0);
  const event=new window.Event('click',{bubbles:true});Object.assign(event,{clientX:231,clientY:302,detail:1});originalButtons[2].dispatchEvent(event);await pause();
@@ -53,7 +54,7 @@ async function fixture(withObserver=true){
  assert.equal(previews.length,grid.querySelectorAll('.lens-preview').length);
  const before=instanceCount;document.dispatchEvent(new window.Event('visibilitychange'));document.dispatchEvent(new window.Event('visibilitychange'));assert.equal(instanceCount,before,'no duplicate observer when already running');
  window.dispatchEvent(new window.Event('pagehide'));assert.equal(playing(),0);window.dispatchEvent(new window.Event('pageshow'));assert.ok(playing()>0);
- return {observer:withObserver,previews:9,cycles:4,hiddenPaused:true,reducedPaused:true,selectionCoordinatesPreserved:true,instanceCount,disconnections};
+ return {observer:withObserver,previews:lensCount,cycles:4,hiddenPaused:true,reducedPaused:true,selectionCoordinatesPreserved:true,instanceCount,disconnections};
 }
 const results=[await fixture(true),await fixture(false)];
 const prior=execFileSync('git',['show','1fca75e:multiverse.js'],{encoding:'utf8'}).replaceAll('\r\n','\n');
@@ -66,4 +67,4 @@ assert.ok(css.includes('prefers-reduced-motion:reduce'));assert.ok(css.includes(
 const keyframes=[...css.matchAll(/@keyframes\s+([\w-]+)/g)].map(m=>m[1]);assert.equal(new Set(keyframes).size,keyframes.length);
 assert.ok(!/requestAnimationFrame|setInterval|setTimeout|WebGLRenderingContext/.test(fs.readFileSync('lens-previews.js','utf8')));
 fs.mkdirSync('review-evidence/lens-previews',{recursive:true});fs.writeFileSync('review-evidence/lens-previews/dom-checks.json',JSON.stringify({kind:'Synthetic DOM logic, not browser/visual acceptance',results,unchangedTransition:true,privateResumePreserved:true,explicitPublicResumeBypass:true,keyframes:keyframes.length},null,2));
-console.log('Selector DOM checks passed: nine distinct previews, visible/offscreen lifecycle, tab visibility, reduced motion, repeated open/close, fallback, original handlers, unchanged circle and preserved private resume.');
+console.log('Selector DOM checks passed: '+lensCount+' distinct previews, visible/offscreen lifecycle, tab visibility, reduced motion, repeated open/close, fallback, original handlers, unchanged circle and preserved private resume.');

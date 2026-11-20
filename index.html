@@ -12,10 +12,11 @@
 <link rel="stylesheet" href="victorian-archive.css">
 <link rel="stylesheet" href="lens-previews.css">
 <link rel="stylesheet" href="resume-cinematic.css">
+<link rel="stylesheet" href="ai-swarm.css">
 <script>
 try {
   const lens = localStorage.getItem('portfolio-lens');
-  if (/^(boho|modern|retro|pixel|vector|spatial|sketch|editorial|victorian)$/.test(lens)) {
+  if (/^(boho|modern|retro|pixel|vector|spatial|sketch|editorial|victorian|swarm)$/.test(lens)) {
     document.documentElement.dataset.mode = lens;
   }
 } catch {}
@@ -33,7 +34,7 @@ try {
 <section class="section contact" id="contact"><p class="chapter">EPILOGUE / THE NEXT CHAPTER</p><h2>Have something<br><em>in mind?</em></h2><p>I’m looking for internship and job opportunities, and freelance projects where I can help turn an idea into a working product.</p><a class="contact-email" href="mailto:abhishekguptadhan26@gmail.com">Let’s build something ↗</a><p class="email-address">abhishekguptadhan26@gmail.com</p><div class="resume-actions" id="resume"><button id="resume-open" hidden>View résumé</button><a href="assets/abhishek-resume.pdf" target="_blank" rel="noopener">Open PDF ↗</a><a href="assets/abhishek-resume.pdf" download>Download PDF ↓</a></div><div class="socials"><a href="https://github.com/Zayden369" target="_blank" rel="noopener">GitHub ↗</a><a href="https://www.linkedin.com/in/abhishek-kumar-gupta-334173401" target="_blank" rel="noopener">LinkedIn ↗</a></div></section>
 </main><footer><span class="footer-name">Abhishek Kumar Gupta</span><span>Made with curiosity. Always evolving.</span><a href="#home">Back to the beginning ↑</a></footer>
 <button class="lens-trigger" aria-haspopup="dialog" id="lens-button"><span class="lens-icon">◉</span> Change the lens <span id="current-mode">Bohemian</span><span>↗</span></button>
-<dialog id="lens-dialog" aria-label="Choose your portfolio style"><div class="dialog-top"><div><p class="chapter">SAME STORY / NINE PERSPECTIVES</p><h2>Choose your lens.</h2></div><button class="close-dialog" aria-label="Close style chooser">×</button></div><p>See the same work through a different design language.</p><div class="lens-grid" id="lens-grid"></div></dialog>
+<dialog id="lens-dialog" aria-label="Choose your portfolio style"><div class="dialog-top"><div><p class="chapter">SAME STORY / TEN PERSPECTIVES</p><h2>Choose your lens.</h2></div><button class="close-dialog" aria-label="Close style chooser">×</button></div><p>See the same work through a different design language.</p><div class="lens-grid" id="lens-grid"></div></dialog>
 <aside class="story-nav" aria-label="Story progress">
   <details><summary><span id="active-chapter">Prologue</span></summary><nav id="chapter-links" aria-label="Chapters"></nav></details>
   <progress id="story-progress" aria-label="Portfolio story progress" max="100" value="0"></progress>
@@ -95,4 +96,7 @@ try {
 <script src="victorian-art.js"></script>
 <script src="victorian-archive.js"></script>
 <script src="lens-preview-art.js"></script>
-<script src="lens-previews.js"></script></body></html>
+<script src="lens-previews.js"></script>
+<script src="ai-swarm-core.js"></script>
+<script src="ai-swarm-art.js"></script>
+<script src="ai-swarm.js"></script></body></html>

@@ -18,6 +18,23 @@
 .lens-preview[data-preview="sketch"] { --lp-cycle:7.6s; }
 .lens-preview[data-preview="editorial"] { --lp-cycle:8s; }
 .lens-preview[data-preview="victorian"] { --lp-cycle:6.8s; }
+.lens-preview[data-preview="swarm"] { --lp-cycle:7.4s; }
+.lp-swarm-outline { transform-origin:19px 17px; animation:lp-swarm-outline var(--lp-cycle) ease-in-out infinite; }
+.lp-swarm-surface { animation:lp-swarm-surface var(--lp-cycle) ease-in-out infinite; }
+.lp-swarm-type { animation:lp-swarm-type var(--lp-cycle) ease-in-out infinite; }
+.lp-swarm-components { animation:lp-swarm-components var(--lp-cycle) ease-in-out infinite; }
+.lp-swarm-layout { transform:translate(70px,45px); animation:lp-swarm-layout var(--lp-cycle) ease-in-out infinite; }
+.lp-swarm-writer { transform:translate(80px,45px); animation:lp-swarm-writer var(--lp-cycle) ease-in-out infinite; }
+.lp-swarm-builder { transform:translate(70px,55px); animation:lp-swarm-builder var(--lp-cycle) ease-in-out infinite; }
+.lp-swarm-qa { transform:translate(80px,55px); animation:lp-swarm-qa var(--lp-cycle) ease-in-out infinite; }
+@keyframes lp-swarm-outline { 0%,100% { transform:scale(0);opacity:0; } 24%,83% { transform:scale(1);opacity:1; } }
+@keyframes lp-swarm-surface { 0%,19%,100% { opacity:0; } 36%,84% { opacity:1; } }
+@keyframes lp-swarm-type { 0%,32%,100% { clip-path:inset(0 100% 0 0);opacity:0; } 51%,83% { clip-path:inset(0);opacity:1; } }
+@keyframes lp-swarm-components { 0%,45%,100% { opacity:0;transform:translateY(4px); } 65%,83% { opacity:1;transform:translateY(0); } }
+@keyframes lp-swarm-layout { 0%,100% { transform:translate(70px,45px); } 11% { transform:translate(19px,17px); } 25%,37% { transform:translate(141px,83px); } 78% { transform:translate(126px,76px); } 90% { transform:translate(70px,45px); } }
+@keyframes lp-swarm-writer { 0%,100% { transform:translate(80px,45px); } 29% { transform:translate(57px,41px); } 51%,64% { transform:translate(123px,47px); } 90% { transform:translate(80px,45px); } }
+@keyframes lp-swarm-builder { 0%,100% { transform:translate(70px,55px); } 45% { transform:translate(57px,56px); } 65%,78% { transform:translate(130px,75px); } 90% { transform:translate(70px,55px); } }
+@keyframes lp-swarm-qa { 0%,100% { transform:translate(80px,55px); } 62% { transform:translate(141px,17px); } 76% { transform:translate(19px,83px); } 90% { transform:translate(80px,55px); } }
 .lp-journal-sheet { transform-origin:24px 50px; animation:lp-journal-open var(--lp-cycle) ease-in-out infinite; }
 .lp-stem { stroke-dasharray:1; animation:lp-ink-grow var(--lp-cycle) ease-in-out infinite; }
 .lp-leaf { transform-box:fill-box; transform-origin:bottom right; animation:lp-leaf-unfold var(--lp-cycle) ease-in-out infinite; }

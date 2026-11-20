@@ -1,6 +1,6 @@
 # Project Multiverse
 
-Buildless HTML, CSS, and JavaScript portfolio. Bohemian is the default. Nine visual lenses share the portfolio content, chapter anchors, project examples, and résumé.
+Buildless HTML, CSS, and JavaScript portfolio. Bohemian is the default. Ten visual lenses share the portfolio content, chapter anchors, project examples, and résumé.
 
 Run a static server from this directory: `python -m http.server 4174 --bind 127.0.0.1`. Open http://127.0.0.1:4174.
 
@@ -23,6 +23,13 @@ Sketchbook now uses the original **Notebook Draft** display alphabet included in
 | Sketchbook | The Inventor's Notebook: a drafting sheet develops into a sharing blueprint, an application sketch becomes an HTML dashboard, a stadium plan is constructed, and real sample points form a numerical experiment. A pencil follows the pinned experience timeline. |
 | Editorial | The Engineer's Edition: a cover opens into a feature spread, followed by full-width security, application, stadium, and probability stories. A pinned profile and toolkit complete the issue. Post-change browser visual QA is pending; see `EDITORIAL_REVIEW.md`. |
 | Victorian | The Mechanical Archive: carved doors unlock, a document vault opens, a paper-fed automaton assembles an application, a stadium model explains routes, and a probability instrument plots computed samples. Native scroll drives the mechanisms. |
+| AI Swarm | The Autonomous Builders: simulated cursor agents construct the actual page through ordered layout, typing, illustration and QA tasks. A cancellable automatic tour visits each project and supporting chapter, then the agents gather around the visitor's pointer. |
+
+AI Swarm uses the stable `swarm` lens key. Its original controller, pure dependency scheduler and inline artwork are in `ai-swarm.js`, `ai-swarm-core.js`, `ai-swarm-art.js` and `ai-swarm.css`. The ten-card chooser includes a dedicated miniature build loop with the existing visibility/reduced-motion lifecycle. No new production library or external agent service is used. These are simulated builders; no AI models execute or modify source at runtime.
+
+Skip Build, Replay Build and Effects controls remain available. Wheel, touch, keyboard, navigation or content interaction hands control to the visitor, reveals all content and stops tour scrolling. The real semantic content and existing links are retained throughout. Reduced motion opens the completed portfolio immediately, without a tour or flock. Desktop uses up to 16 decorative cursors; narrow/coarse-pointer devices use six and a compact standby formation. One active frame loop coordinates movement and the tour; it stops for hidden tabs, dialogs and inactive lenses. Internal project jump links trigger short contextual drawing/inspection reactions; external links and the résumé keep their ordinary behavior.
+
+Run `node tools/check_swarm.mjs` with the isolated LinkeDOM dependency described below. This exercises the dependency graph, full tour, manual takeover, replay, dialog suspension, mode cleanup, reduced motion, hash entry and mobile agent count with synthetic geometry. It also compares the résumé controller and circular lens transition to the preceding source. See `AI_SWARM_REVIEW.md` for reference inspection, architecture, checks, outstanding visual acceptance and review instructions. Browser automation was unavailable during this implementation; no actual frame-rate, mobile-layout or visual-quality result is claimed. This feature branch is for review, without a production deployment.
 
 Every lens uses the shared scroll scheduler and chapter navigator. Completed lens controllers provide their own responsive story layouts and reduced-motion alternatives. Reduced motion opens the PDF viewer immediately. The 3D lens lazily loads the locally bundled Three.js runtime and uses one WebGL renderer, with an illustrated architectural fallback when rendering is unavailable. Its GPU resources are disposed when leaving the lens. See `MUSEUM_ART_DIRECTION.md` and `MUSEUM_REVIEW.md` for the architectural direction and actual verification record.
 

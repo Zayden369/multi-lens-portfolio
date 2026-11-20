@@ -1,4 +1,4 @@
-/* A single observer manages nine CSS timelines; no timers, RAFs or render contexts. */
+/* A single observer manages the lens timelines; no timers, RAFs or render contexts. */
 (() => {
  const dialog=document.querySelector('#lens-dialog'),grid=document.querySelector('#lens-grid');
  if(!dialog||!grid||!window.LensPreviewArt)return;
