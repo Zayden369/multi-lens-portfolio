@@ -8,7 +8,7 @@ const require=createRequire(resolve('.reference-review/editorial-test/package.js
 const {parseHTML}=require('linkedom');
 const html=fs.readFileSync('index.html','utf8'),source=fs.readFileSync('resume-cinematic.js','utf8');
 const flush=async()=>{for(let i=0;i<12;i++)await Promise.resolve();};
-function fixture({publicRelease=false,motion=false,pdf=true,playResults=[],decoded=true,frameApi=true}={}){
+function fixture({publicRelease=false,publicCinematic=false,motion=false,pdf=true,playResults=[],decoded=true,frameApi=true}={}){
  const {window,document}=parseHTML(html),root=document.documentElement,dialog=document.querySelector('#resume-dialog'),video=document.querySelector('#resume-video');
  const $=s=>document.querySelector(s),timers=new Map(),frames=new Map(),mediaListeners=new Set();
  let now=0,id=0,plays=0,pauses=0,shows=0,focused=null,draws=0;
@@ -30,6 +30,7 @@ function fixture({publicRelease=false,motion=false,pdf=true,playResults=[],decod
  function clearTimer(n){timers.delete(n);}
  async function advance(ms){const end=now+ms;for(;;){await flush();const next=[...timers.entries()].filter(([,t])=>t.at<=end).sort((a,b)=>a[1].at-b[1].at)[0];if(!next)break;now=next[1].at;timers.delete(next[0]);next[1].fn();}now=end;await flush();}
  if(publicRelease)root.dataset.resumeCinematic='disabled';
+ if(publicCinematic)root.dataset.resumeCinematic='enabled';
  vm.runInNewContext(source,{document,window,navigator:{pdfViewerEnabled:pdf},MutationObserver:window.MutationObserver,AbortController,matchMedia:()=>media,setTimeout:setTimer,clearTimeout:clearTimer,console});
  const click=s=>$(s).dispatchEvent(new window.Event('click',{bubbles:true,cancelable:true}));
  const intro=()=>{const e=new window.Event('animationend');e.animationName='resume-intro-timeline';$('#resume-energy').dispatchEvent(e);};
@@ -49,7 +50,7 @@ for(const config of [{publicRelease:true},{motion:true},{publicRelease:true,pdf:
  f.click('#resume-close');assert.equal(f.phase(),'closed');assert.equal(f.$('#resume-pdf'),null);assert.equal(f.focused,f.$('#resume-open'));report.push({config,directPdf:true});
 }
 {
- const f=fixture();f.click('#resume-open');assert.equal(f.phase(),'energy-intro');assert.equal(f.plays,1);f.click('#resume-open');assert.equal(f.shows,1);assert.equal(f.plays,1);await flush();assert.equal(f.video.currentTime,0);
+ const f=fixture({publicCinematic:true});f.click('#resume-open');assert.equal(f.phase(),'energy-intro');assert.equal(f.plays,1);f.click('#resume-open');assert.equal(f.shows,1);assert.equal(f.plays,1);await flush();assert.equal(f.video.currentTime,0);
  f.intro();await flush();assert.equal(f.phase(),'video-loading');assert.equal(f.$('#resume-energy').hidden,false,'opaque intro cover stays until a decoded frame');f.firstFrame();assert.equal(f.phase(),'video-playing');
  assert.equal(f.video.getAttribute('src'),'assets/resume-cinematic.mp4');assert.equal(f.video.loop,false);assert.equal(f.video.controls,false);assert.equal(f.video.playbackRate,1);assert.equal(f.$('#resume-energy').hidden,true);assert.equal(f.$('#resume-view').hidden,true);assert.equal(f.$('#resume-pdf'),null);
  f.video.dispatchEvent(new f.window.Event('ended'));f.pdfLoad();await flush();assert.equal(f.phase(),'final-frame-hold');assert.equal(f.video.getAttribute('src'),'assets/resume-cinematic.mp4');assert.equal(f.video.paused,true);assert.equal(f.draws,1);assert.equal(f.$('#resume-freeze').width,1280);assert.equal(f.dialog.dataset.freezeSource,'decoded-video-frame');
