@@ -1,0 +1,58 @@
+/* Full-viewport cinematic layers, isolated from all nine artistic lenses. */
+#resume-dialog { --intro-duration:1550ms; }
+#resume-dialog[open] { position:fixed; inset:0; width:100vw; height:100dvh; max-width:none; max-height:none; margin:0; padding:0; border:0; border-radius:0; overflow:hidden; background:#05060a; color:#f5f5f7; display:block; font:16px/1.5 Arial,Helvetica,sans-serif; }
+#resume-dialog::backdrop { background:#05060a; backdrop-filter:none; }
+#resume-dialog [hidden] { display:none!important; }
+#resume-dialog .resume-controls { position:absolute; inset:0; z-index:10; pointer-events:none; }
+#resume-dialog .resume-controls button { position:absolute; top:max(14px,env(safe-area-inset-top)); min-height:44px; padding:10px 15px; border:1px solid #ffffff4d; border-radius:5px; background:#101117d9; color:#f6f6f8; font:600 14px/1.3 Arial,sans-serif; pointer-events:auto; cursor:pointer; }
+#resume-dialog #resume-skip { left:max(14px,env(safe-area-inset-left)); }
+#resume-dialog #resume-close { right:max(14px,env(safe-area-inset-right)); }
+#resume-dialog #resume-close span { margin-left:8px; font-size:18px; }
+#resume-dialog :is(button,a,iframe):focus-visible { outline:3px solid #a9c7ff; outline-offset:4px; }
+#resume-energy { position:absolute; inset:0; z-index:4; background:#05060a; }
+#resume-energy svg { display:block; width:100%; height:100%; }
+#resume-energy .rc-orb-blue { transform:translateX(-250px); }
+#resume-energy .rc-orb-red { transform:translateX(250px); }
+#resume-energy .rc-collision { opacity:0; }
+#resume-energy.is-running { animation:resume-intro-timeline var(--intro-duration) linear both; }
+#resume-energy.is-running .rc-orb-blue { animation:resume-blue-convergence var(--intro-duration) cubic-bezier(.65,0,.4,1) both; }
+#resume-energy.is-running .rc-orb-red { animation:resume-red-convergence var(--intro-duration) cubic-bezier(.65,0,.4,1) both; }
+#resume-energy.is-running .rc-blue-surface { animation:resume-blue-surface var(--intro-duration) ease-in both; }
+#resume-energy.is-running .rc-red-surface { animation:resume-red-surface var(--intro-duration) ease-in both; }
+#resume-energy.is-running .rc-collision { animation:resume-collision var(--intro-duration) ease-out both; }
+@keyframes resume-intro-timeline { 0% { opacity:.999; } 1%,100% { opacity:1; } }
+@keyframes resume-blue-convergence { 0% { opacity:0; transform:translate(-280px,8px) scale(.45); } 16% { opacity:1; transform:translate(-248px,-8px) scale(.95); } 42% { transform:translate(-225px,-6px) scale(1.04); opacity:1; } 78% { transform:translate(-92px,0) scale(1.12); opacity:1; } 91% { transform:translate(0,0) scale(.65); opacity:.9; } 100% { transform:translate(0,0) scale(.2); opacity:0; } }
+@keyframes resume-red-convergence { 0% { opacity:0; transform:translate(280px,-8px) scale(.45); } 16% { opacity:1; transform:translate(248px,8px) scale(.95); } 42% { transform:translate(225px,6px) scale(1.04); opacity:1; } 78% { transform:translate(92px,0) scale(1.12); opacity:1; } 91% { transform:translate(0,0) scale(.65); opacity:.9; } 100% { transform:translate(0,0) scale(.2); opacity:0; } }
+@keyframes resume-blue-surface { to { transform:rotate(65deg); } }
+@keyframes resume-red-surface { to { transform:rotate(-65deg); } }
+/* One bounded bloom, with no repeated flashes or independent particle systems. */
+@keyframes resume-collision { 0%,73% { opacity:0; transform:scale(.25); } 91% { opacity:.8; transform:scale(1.15); } 100% { opacity:.2; transform:scale(1.65); } }
+#resume-film { position:absolute; inset:0; z-index:3; background:#05060a; pointer-events:none; }
+#resume-dialog :is(#resume-video,#resume-freeze,#resume-final-frame) { display:block; position:absolute; inset:0; width:100%; height:100%; max-width:none; max-height:none; margin:0; object-fit:contain; object-position:center; background:#05060a; border:0; pointer-events:none; }
+#resume-dialog #resume-freeze,#resume-dialog #resume-final-frame { z-index:1; }
+#resume-dialog #resume-video::-webkit-media-controls { display:none!important; }
+#resume-dialog #resume-view { position:absolute; inset:0; z-index:1; display:flex; flex-direction:column; height:100%; width:100%; padding:0; overflow:hidden; background:#282a31; color:#f6f6f8; opacity:1; }
+#resume-dialog .resume-document-toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:12px 24px; padding:max(17px,env(safe-area-inset-top)) 120px 17px max(22px,env(safe-area-inset-left)); border-bottom:1px solid #ffffff25; background:#17191e; flex:0 0 auto; }
+#resume-dialog #resume-title { margin:0; color:#f6f6f8; font:600 18px/1.4 Arial,Helvetica,sans-serif; text-shadow:none; letter-spacing:0; }
+#resume-dialog .resume-document-toolbar nav { display:flex; flex-wrap:wrap; gap:10px; font:14px/1.4 Arial,sans-serif; }
+#resume-dialog .resume-document-toolbar a,#resume-dialog #resume-pdf-fallback a { display:inline-flex; align-items:center; min-height:42px; padding:9px 12px; border:1px solid #ffffff50; border-radius:4px; color:#f6f6f8; background:#242830; text-decoration:none; font:600 14px/1.4 Arial,sans-serif; }
+#resume-dialog .resume-document-body { position:relative; flex:1 1 auto; min-height:0; overflow:hidden; }
+#resume-pdf-host { position:absolute; inset:0; }
+#resume-dialog #resume-pdf { display:block; width:100%; height:100%; border:0; background:#303034; }
+#resume-dialog #resume-pdf-fallback { position:absolute; inset:0; padding:30px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; text-align:center; background:#282a31; }
+#resume-dialog #resume-pdf-fallback h3 { font:400 38px/1.1 Georgia,serif; margin:0; color:#f6f6f8; }
+#resume-dialog #resume-pdf-fallback p { max-width:420px; margin:0; font:16px/1.6 Arial,sans-serif; color:#d0d4df; }
+#resume-dialog .resume-document-hint { flex:0 0 auto; padding:8px max(15px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(15px,env(safe-area-inset-left)); margin:0; font:12px/1.4 Arial,sans-serif; color:#ccd1dc; text-align:center; }
+#resume-dialog .resume-sr-only { position:absolute; width:1px; height:1px; margin:-1px!important; padding:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
+@media(max-width:600px) {
+ #resume-dialog .resume-document-toolbar { padding:20px 110px 12px 15px; gap:10px; }
+ #resume-dialog #resume-title { font-size:16px; }
+ #resume-dialog .resume-document-toolbar nav { gap:7px; margin-right:-90px; }
+ #resume-dialog .resume-document-toolbar a { font-size:12px; padding:8px 10px; }
+ #resume-dialog .resume-controls button { padding:9px 11px; font-size:13px; }
+ #resume-dialog .resume-document-hint { font-size:11px; }
+}
+@media(prefers-reduced-motion:reduce) {
+ #resume-energy,#resume-film { display:none!important; }
+ #resume-dialog :is(#resume-view,#resume-film) { animation:none!important; transition:none!important; }
+}
